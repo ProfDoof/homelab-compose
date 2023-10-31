@@ -18,15 +18,6 @@ services:
       - 443:443
     restart: unless-stopped
 
-  whoami:
-    image: traefik/whoami
-    networks:
-      - proxied
-    labels:
-      caddy: whoami.johnmarsden.dev
-      caddy.reverse_proxy: "{{upstreams 80}}"
-      caddy.log.output: "file /var/log/caddy/whoami.johnmarsden.dev.log"
-
   # Manage the server using compose files
   yacht:
     image: selfhostedpro/yacht
