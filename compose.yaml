@@ -4,7 +4,9 @@ services:
   # This is the only container that should have outward facing ports. Everything else
   # should be proxied through it
   proxy:
-    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile_caddy
     environment:
       - CADDY_INGRESS_NETWORKS=proxied
     networks:
