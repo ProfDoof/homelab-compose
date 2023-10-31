@@ -3,7 +3,7 @@ FROM caddy:${CADDY_VERSION}-builder AS builder
 
 RUN xcaddy build \
     --with github.com/lucaslorentz/caddy-docker-proxy/v2 \
-    --with https://github.com/mholt/caddy-webdav
+    --with github.com/mholt/caddy-webdav
 
 FROM caddy:${CADDY_VERSION}-alpine
 
