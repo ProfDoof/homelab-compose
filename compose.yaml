@@ -4,7 +4,9 @@ services:
   # This is the only container that should have outward facing ports. Everything else
   # should be proxied through it
   proxy:
-    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile_caddy
     environment:
       - CADDY_INGRESS_NETWORKS=proxied
     networks:
@@ -18,19 +20,12 @@ services:
       - 443:443
     restart: unless-stopped
 
-  whoami:
-    image: traefik/whoami
-    networks:
-      - proxied
-    labels:
-      caddy: whoami.johnmarsden.dev
-      caddy.reverse_proxy: "{{upstreams 80}}"
-      caddy.log.output: "file /var/log/caddy/whoami.johnmarsden.dev.log"
-
   # Manage the server using compose files
   yacht:
     image: selfhostedpro/yacht
     container_name: yacht
+    depends_on:
+      - proxy
     networks:
       - proxied
     volumes:
@@ -48,6 +43,8 @@ services:
   ntfy:
     image: binwiederhier/ntfy
     container_name: ntfy
+    depends_on:
+      - proxy
     command:
       - serve
     networks:
